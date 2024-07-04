@@ -1603,6 +1603,7 @@ namespace FairyGUI
                 ConstructExtension(buffer);
 
             ConstructFromXML(null);
+            OnConstruct();
 
 #if FAIRYGUI_TOLUA
             CallLua("ctor");
@@ -1615,6 +1616,10 @@ namespace FairyGUI
 
         virtual protected void ConstructExtension(ByteBuffer buffer)
         {
+        }
+
+        virtual protected void OnConstruct()
+        {  
         }
 
         /// <summary>
