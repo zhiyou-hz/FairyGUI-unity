@@ -388,7 +388,8 @@ namespace FairyGUI
             if (index >= 0 && index < numChildren)
                 return _children[index];
             else
-                throw new Exception("Invalid child index: " + index + ">" + numChildren);
+                //throw new Exception("Invalid child index: " + index + ">" + numChildren);
+                return null;
         }
 
         /// <summary>
