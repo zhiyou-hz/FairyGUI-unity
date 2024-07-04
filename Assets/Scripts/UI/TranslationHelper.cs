@@ -28,7 +28,16 @@ namespace FairyGUI
                     col = new Dictionary<string, string>();
                     strings[key2] = col;
                 }
-                col[key3] = text;
+
+                if (string.IsNullOrEmpty(text))
+                {
+                    col[key3] = text;
+                }
+                else
+                {
+                    col[key3] = text.Replace("\\n", "\n")
+                                .Replace("\\r", "\r");
+                }
             }
         }
 
