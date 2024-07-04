@@ -96,6 +96,8 @@ namespace FairyGUI
         // 自定义数据
         public Object CustomData {get; set;}
 
+        public Func<int, float> GetItemSize;
+
         public GList()
             : base()
         {
@@ -1538,7 +1540,15 @@ namespace FairyGUI
                         for (int i = oldCount; i < _realNumItems; i++)
                         {
                             ItemInfo ii = new ItemInfo();
-                            ii.size = _itemSize;
+                            if(GetItemSize == null)
+                            {
+                                ii.size = _itemSize;
+                            }
+                            else
+                            {
+                                ii.size = _itemSize;
+                                ii.size.x = GetItemSize(i);
+                            }
 
                             _virtualItems.Add(ii);
                         }
