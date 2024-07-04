@@ -150,13 +150,23 @@ namespace FairyGUI
                 {
                     _wholeNumbers = value;
                     Update();
+                    this.enabled = false;
                 }
             }
         }
 
+        private bool IsFixed => _min == _max;
+
         private void Update()
         {
-            UpdateWithPercent((float)((_value - _min) / (_max - _min)), false);
+            if (IsFixed)
+            {
+                UpdateWithPercent(1f, false);
+            }
+            else
+            {
+                UpdateWithPercent((float)((_value - _min) / (_max - _min)), false);
+            }
         }
 
         private void UpdateWithPercent(float percent, bool manual)
@@ -351,7 +361,7 @@ namespace FairyGUI
 
         private void __gripTouchMove(EventContext context)
         {
-            if (!this.canDrag)
+            if (!this.canDrag || IsFixed)
                 return;
 
             InputEvent evt = context.inputEvent;
@@ -383,7 +393,7 @@ namespace FairyGUI
 
         private void __barTouchBegin(EventContext context)
         {
-            if (!changeOnClick)
+            if (!changeOnClick || IsFixed)
                 return;
 
             InputEvent evt = context.inputEvent;
