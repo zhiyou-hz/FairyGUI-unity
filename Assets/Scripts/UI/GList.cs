@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FairyGUI.Utils;
 using UnityEngine;
+using Object = System.Object;
 
 namespace FairyGUI
 {
@@ -91,6 +92,9 @@ namespace FairyGUI
         List<ItemInfo> _virtualItems;
 
         EventCallback1 _itemClickDelegate;
+
+        // 自定义数据
+        public Object CustomData {get; set;}
 
         public GList()
             : base()
