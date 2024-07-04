@@ -28,6 +28,8 @@ namespace FairyGUI
         /// </summary>
         public float soundVolume { get; set; }
 
+        public float clickCooldown { get; set; }
+
         public event Action beforeUpdate;
         public event Action afterUpdate;
 
@@ -66,6 +68,18 @@ namespace FairyGUI
         internal static int _clickTestThreshold;
         static IKeyboard _keyboard;
         static bool _keyboardOpened;
+
+        private float _lastClickTime = 0f;
+
+        public bool CanClick => touchCount <= 0 && TimeNow - _lastClickTime > clickCooldown;
+
+        public float TimeNow
+        {
+            get
+            {
+                return Time.time * 1000f;
+            }
+        }
 
         static Stage _inst;
         /// <summary>
@@ -207,6 +221,7 @@ namespace FairyGUI
         {
             _inst = this;
             soundVolume = 1;
+            clickCooldown = 200f;
 
             _updateContext = new UpdateContext();
             _frameGotHitTarget = -1;
@@ -1195,7 +1210,7 @@ namespace FairyGUI
                     touch.End();
 
                     DisplayObject clickTarget = touch.ClickTest();
-                    if (clickTarget != null)
+                    if (clickTarget != null && CanClick)
                     {
                         touch.UpdateEvent();
 
@@ -1207,6 +1222,8 @@ namespace FairyGUI
                             clickTarget.BubbleEvent("onRightClick", touch.evt);
                         else
                             clickTarget.BubbleEvent("onClick", touch.evt);
+
+                        _lastClickTime = TimeNow;
                     }
 
                     touch.button = -1;
@@ -1293,11 +1310,12 @@ namespace FairyGUI
                         if (uTouch.phase != TouchPhase.Canceled)
                         {
                             DisplayObject clickTarget = touch.ClickTest();
-                            if (clickTarget != null)
+                            if (clickTarget != null && CanClick)
                             {
                                 touch.clickCount = uTouch.tapCount;
                                 touch.UpdateEvent();
                                 clickTarget.BubbleEvent("onClick", touch.evt);
+                                _lastClickTime = TimeNow;
                             }
                         }
 
